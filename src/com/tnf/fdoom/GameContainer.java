@@ -10,14 +10,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.security.AccessControlException;
-
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 
-import com.tnf.fdoom.screen.TitleMenu;
+import com.tnf.fdoom.handlers.Data;
 import com.tnf.fdoom.handlers.Handler;
 import com.tnf.fdoom.screen.SplashMenu;
-
+import com.tnf.fdoom.handlers.Logger;
 /**
  * 		Game Container
  *
@@ -148,40 +146,26 @@ public class GameContainer
 	 * Displays a "Save as" dialog for the user to choose a savegame filename,
 	 * then writes the active game to the file.
 	 */
-	public void saveGame()
+	public void saveGame(String worldname)
 	{
-		try {
-			// create a file chooser
-			final JFileChooser fc = new JFileChooser();
+		//TODO: check if folder exists. IF-NOT, create it.
+		try{
+			File file = new File(Data.locationSaves + worldname + "/game");
+			Logger.printLine("Saving: " + file + ".");
+			try{
+				FileOutputStream fileOut = new FileOutputStream(file);
+				ObjectOutputStream out = new ObjectOutputStream(fileOut);
 
-			// choose file
-			int returnVal = fc.showSaveDialog(null);
-			if (returnVal != JFileChooser.APPROVE_OPTION) {
-	            System.out.println("Game saving canceled by user.\n");
-	            return;
-	        }
-
-			// get file
-			File file = fc.getSelectedFile();
-	        System.out.println("Saving: " + file.getName() + ".\n");
-
-	        // save game to file
-			try {
-	            FileOutputStream fileOut = new FileOutputStream(file);
-	            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-
-	            out.writeObject(this.game);
-
-	            out.close();
-	            fileOut.close();
-	        } catch(FileNotFoundException e) {
-	            e.printStackTrace();
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }
+				out.writeObject(game);
+				out.close();
+				fileOut.close();
+			} catch (FileNotFoundException e) {
+				Logger.printLine(worldname + " File not found. Could not load game file.", Logger.ERROR);
+			} catch (IOException e) {
+				Logger.printLine("Could not read: " + worldname + ", therefor could nto load save.", Logger.ERROR);
+			}
 		} catch (AccessControlException e) {
-			// no saving for you!
-			e.printStackTrace();
+			Logger.printLine("Could not save: " + worldname + " Due to access Control.", Logger.ERROR);
 		}
 	}
 
@@ -190,52 +174,31 @@ public class GameContainer
 	 * then deserializes the saved game and swaps it with the current one.
 	 * The loaded game is then started.
 	 */
-	public void loadGame()
+	public void loadGame(String worldname)
 	{
-		try {
-			// create a file chooser
-			final JFileChooser fc = new JFileChooser();
-
-			// choose file
-			int returnVal = fc.showOpenDialog(null);
-			if (returnVal != JFileChooser.APPROVE_OPTION) {
-	            System.out.println("Game loading canceled by user.\n");
-	            return;
-	        }
-
-			// get file
-			File file = fc.getSelectedFile();
-	        System.out.println("Opening: " + file.getName() + ".\n");
-
-	        // load game from file
-	        Game newGame = null;
+		try{
+			File file = new File(Data.locationSaves + worldname + "/game");
+			Logger.printLine("Loading: " + file + ".");
+			Game newGame = null;
 			try {
-	            FileInputStream fileIn = new FileInputStream(file);
-	            ObjectInputStream in = new ObjectInputStream(fileIn);
+				FileInputStream fileIn = new FileInputStream(file);
+				ObjectInputStream in = new ObjectInputStream(fileIn);
 
-	            newGame = (Game)in.readObject();
+				newGame = (Game)in.readObject();
 
-	            in.close();
-	            fileIn.close();
-	        } catch (ClassNotFoundException e) {
-	            e.printStackTrace();
-	            return;
-	        } catch(FileNotFoundException e) {
-	            e.printStackTrace();
-	            return;
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	            return;
-	        }
-
-			// swap games
-			this.stopGame();
-			this.game = newGame;
-			this.game.loadGame();
-			this.startGame();
+				in.close();
+				fileIn.close();
+			} catch (ClassNotFoundException e) {
+				Logger.printLine("Could not find class while loading save.", Logger.ERROR);
+				return;
+			} catch (FileNotFoundException e) {
+				Logger.printLine("Could not find file while loading save.", Logger.ERROR);
+				return;
+			} catch (IOException e) {
+				Logger.printLine("Could not start file: " + worldname, Logger.ERROR);
+			}
 		} catch (AccessControlException e) {
-			// no loading for you!
-			e.printStackTrace();
+			Logger.printLine("Could not load the game file: " + worldname, Logger.ERROR);
 		}
 	}
 

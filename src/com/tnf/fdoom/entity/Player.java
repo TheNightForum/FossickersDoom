@@ -36,9 +36,9 @@ public class Player extends LivingEntity {
 	public int invulnerableTime = 0;
 
 	public Player() {
-		
+
 	}
-	
+
 	public Player(Game game, InputHandler input) {
 		this.game = game;
 		this.input = input;
@@ -62,12 +62,12 @@ public class Player extends LivingEntity {
 	{
 		this.game = game;
 	}
-	
+
 	public void setInput(InputHandler input)
 	{
 		this.input = input;
 	}
-	
+
 	public void tick() {
 		super.tick();
 
@@ -136,10 +136,10 @@ public class Player extends LivingEntity {
 			}
 		}
 		if (input.save.clicked) {
-			GameContainer.getInstance().saveGame();
+			//GameContainer.getInstance().saveGame();
 		}
 		if (input.load.clicked) {
-			GameContainer.getInstance().loadGame();
+			//GameContainer.getInstance().loadGame();
 		}
 		if (attackTime > 0) attackTime--;
 
@@ -183,7 +183,7 @@ public class Player extends LivingEntity {
 			if (dir == 3 && interact(x + 4, y - 8 + yo, x + range, y + 8 + yo)) done = true;
 			if (dir == 2 && interact(x - range, y - 8 + yo, x - 4, y + 8 + yo)) done = true;
 			if (done) return;
-	
+
 			int xt = x >> 4;
 			int yt = (y + yo) >> 4;
 			int r = 12;
@@ -191,7 +191,7 @@ public class Player extends LivingEntity {
 			if (attackDir == 1) yt = (y - r + yo) >> 4;
 			if (attackDir == 2) xt = (x - r) >> 4;
 			if (attackDir == 3) xt = (x + r) >> 4;
-	
+
 			if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h) {
 				if (activeItem != null && activeItem.interactOn(level.getTile(xt, yt), level, xt, yt, this, attackDir)) {
 					done = true;
@@ -421,7 +421,7 @@ public class Player extends LivingEntity {
 		level.player.invulnerableTime = 60 * 5;
 		game.won();
 	}
-	
+
 	@Override
 	public void readExternal(ObjectInput in) throws IOException,
 			ClassNotFoundException
@@ -440,7 +440,7 @@ public class Player extends LivingEntity {
 		onStairDelay = in.readInt();
 		invulnerableTime = in.readInt();
 	}
-	
+
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException
 	{
