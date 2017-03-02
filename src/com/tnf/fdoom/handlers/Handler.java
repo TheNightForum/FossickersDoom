@@ -20,8 +20,8 @@ public class Handler
   private static final String FirstTime = "First_Time";
   public static final String FOW = "Fog_Of_War";
   private static final String UsingLauncher = "Using_Launcher";
-  private static final String LastWorld = "Last_World";
-  private static final String CurrentWorld = "Current_World";
+  public static final String LastWorld = "Last_World";
+  public static final String CurrentWorld = "Current_World";
   private static final String PlayerName = "Player_Name";
 
   public static void main(){
@@ -56,8 +56,7 @@ public class Handler
               try {
                   out.close();
               } catch (IOException ex) {
-                  System.out.println("IOException: Could not close config.properties output stream; " + ex.getMessage());
-                  ex.printStackTrace();
+                Logger.printLine("IOException: Could not close config.properties output stream", Logger.ERROR);
               }
           }
       }

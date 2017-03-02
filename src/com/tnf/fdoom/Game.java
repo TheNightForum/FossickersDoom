@@ -26,6 +26,7 @@ import com.tnf.fdoom.screen.Menu;
 import com.tnf.fdoom.screen.TitleMenu;
 import com.tnf.fdoom.screen.WonMenu;
 import com.tnf.fdoom.handlers.Handler;
+import com.tnf.fdoom.handlers.Logger;
 
 public class Game extends Canvas implements Runnable, Externalizable
 {
@@ -211,7 +212,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 					render();
 				} catch (IllegalStateException e) {
 					// this is where it gets messed up so we bail out!
-					System.err.println("Game thread exiting, rendering failed:");
+					Logger.printLine("Game thread exiting, rendering failed:", Logger.ERROR);
 					e.printStackTrace();
 					running = false;
 					break;
@@ -389,7 +390,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 	}
 
 	private void renderFocusNagger() {
-		String msg = "Click to focus!";
+		String msg = "Game Paused!";
 		int xx = (WIDTH - msg.length() * 8) / 2;
 		int yy = (HEIGHT - 8) / 2;
 		int w = msg.length();
