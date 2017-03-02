@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 
 import com.tnf.fdoom.screen.TitleMenu;
 import com.tnf.fdoom.handlers.Handler;
+import com.tnf.fdoom.screen.SplashMenu;
 
 /**
  * 		Game Container
@@ -47,7 +48,7 @@ public class GameContainer
 
 		this.game = new Game();
 		this.game.initGraphics();
-		this.game.setMenu(new TitleMenu());
+		this.game.setMenu(new SplashMenu());
 	}
 
 	/**

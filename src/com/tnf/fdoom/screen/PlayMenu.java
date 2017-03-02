@@ -15,7 +15,7 @@ import javax.imageio.ImageIO;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class TitleMenu extends Menu {
+public class PlayMenu extends Menu {
 	private int selected = 0;
 	public static final int MINIGAME_WIDTH = Game.WIDTH >> 4;
 	public static final int MINIGAME_HEIGHT = Game.HEIGHT >> 4;
@@ -30,8 +30,8 @@ public class TitleMenu extends Menu {
 
 	private AtomicBoolean miniLoaded;
 	//private static final String[] options = { "Start game", "Load game", "How to play", "Setup", "About" };
-	private static final String[] options = { "Play", "Options", "Credits", "Quit"};
-	public TitleMenu() {
+	private static final String[] options = { "Continue", "New", "Load", "How to play", "Back"};
+	public PlayMenu() {
 		miniLoaded = new AtomicBoolean();
 		miniLoaded.set(false);
 		Thread thread = new Thread() {
@@ -68,7 +68,7 @@ public class TitleMenu extends Menu {
 		if (input.attack.clicked || input.menu.clicked) {
 			if (selected == 0) {
 				Sound.test.play();
-				game.setMenu(new PlayMenu());
+				//game.setMenu(new PlayMenu());
 			}
 			if (selected == 1) {
 				Sound.test.play();
@@ -80,7 +80,11 @@ public class TitleMenu extends Menu {
 			}
 			if (selected == 3) {
 				Sound.test.play();
-				System.exit(0);
+
+			}
+			if (selected == 4) {
+				Sound.test.play();
+				game.setMenu(new TitleMenu());
 			}
 		}
 		if (miniLoaded.get()) {

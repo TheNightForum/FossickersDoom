@@ -1,66 +1,82 @@
 package com.tnf.fdoom.screen;
 
+import java.io.IOException;
+
+import java.util.Calendar;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.imageio.ImageIO;
+
 import com.tnf.fdoom.Game;
-import com.tnf.fdoom.GameContainer;
 import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Screen;
 import com.tnf.fdoom.gfx.SpriteSheet;
 import com.tnf.fdoom.handlers.Logger;
+import com.tnf.fdoom.sound.Sound;
 import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
-import com.tnf.fdoom.sound.Sound;
 
-import javax.imageio.ImageIO;
-import java.io.IOException;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-public class TitleMenu extends Menu {
+public class UpdateMenu extends Menu {
 	private int selected = 0;
 	public static final int MINIGAME_WIDTH = Game.WIDTH >> 4;
 	public static final int MINIGAME_HEIGHT = Game.HEIGHT >> 4;
 	private Level miniGame;
 	private Screen miniScreen;
 	private int tickCount;
-
+	
+	
 	public static int DEFAULT_TEXT_COLOR = Color.get(-1, 555, 555, 555);
 	public static int DEFAULT_TITLE_COLOR = Color.get(112, 445, 445, 445);
 	public static int DEFAULT_BACKGROUND_COLOR = Color.get(112, 112, 112, 112);
 	public static int DEFAULT_BORDER_COLOR = Color.get(-1, 2, 112, 445);
-
+	
 	private AtomicBoolean miniLoaded;
-	//private static final String[] options = { "Start game", "Load game", "How to play", "Setup", "About" };
-	private static final String[] options = { "Play", "Options", "Credits", "Quit"};
-	public TitleMenu() {
-		miniLoaded = new AtomicBoolean();
-		miniLoaded.set(false);
-		Thread thread = new Thread() {
-			public void run() {
-				miniGame = new Level(128, 128, 0, null);
-				miniGame.trySpawn(10000);
-				// simulate some history
-				for (int i = 0; i < 1000; i++) {
-					miniGame.tick();
-				}
-				miniLoaded.set(true);
-			};
-		};
-		thread.start();
+	
+	
+	private static final String[] options = { "Download", "Skip" };
 
-		try {
-			miniScreen = new Screen(MINIGAME_WIDTH * 16, MINIGAME_HEIGHT * 16, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
-		} catch (IOException e) {
-			Logger.printLine("Oh no. Could not load Sprite for game...", Logger.ERROR);
+	
+	public UpdateMenu() {
+		
+		Calendar var1 = Calendar.getInstance();
+		
+		if(var1.get(2) + 1 == 12 && var1.get(5) >= 20 && var1.get(5) <= 26)
+		{
+			//this.isChristmas = true;
 		}
+		
+		// generate a game in the background
+				miniLoaded = new AtomicBoolean();
+				miniLoaded.set(false);
+				Thread thread = new Thread() {
+					public void run() {
+						miniGame = new Level(128, 128, 0, null);
+						miniGame.trySpawn(10000);
+						// simulate some history
+						for (int i = 0; i < 1000; i++) {
+							miniGame.tick();
+						}
+						miniLoaded.set(true);
+					};
+				};
+				thread.start();
+				
+				try {
+					miniScreen = new Screen(MINIGAME_WIDTH * 16, MINIGAME_HEIGHT * 16, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
+				} catch (IOException e) {
+					e.printStackTrace();
+					Logger.printLine("Oh no. Could not load Sprite for game...", Logger.ERROR);
+				}
 	}
 
 	public void tick() {
+		
 		tickCount++;
+		
 		if (input.up.clicked) selected--;
 		if (input.down.clicked) selected++;
-		if (input.up.clicked) Sound.pickup.play();
-		if (input.down.clicked) Sound.pickup.play();
-
+		
 		int len = options.length;
 		if (selected < 0) selected += len;
 		if (selected >= len) selected -= len;
@@ -68,19 +84,14 @@ public class TitleMenu extends Menu {
 		if (input.attack.clicked || input.menu.clicked) {
 			if (selected == 0) {
 				Sound.test.play();
-				game.setMenu(new PlayMenu());
+				//ClientUtils.DownloadUpdates();
+				//this.game.setMenu(new ForceMenu());
 			}
 			if (selected == 1) {
 				Sound.test.play();
-				//game.setMenu(new SetupMenu(this));
-			}
-			if (selected == 2) {
-				Sound.test.play();
-				//game.setMenu(new AboutMenu());
-			}
-			if (selected == 3) {
-				Sound.test.play();
-				System.exit(0);
+				//if(OptionFile.name.equals("Player")) this.game.setMenu(new NewPlayer(this));
+				//else this.game.setMenu(new TitleMenu());
+				this.game.setMenu(new TitleMenu());
 			}
 		}
 		if (miniLoaded.get()) {
@@ -88,6 +99,7 @@ public class TitleMenu extends Menu {
 			Tile.tickCount++;
 		}
 	}
+	
 
 	public void render(Screen screen) {
 		screen.clear(0);
@@ -98,8 +110,10 @@ public class TitleMenu extends Menu {
 			miniGame.renderBackground(miniScreen, xScroll, yScroll);
 			miniGame.renderSprites(miniScreen, xScroll, yScroll);
 			miniScreen.copyRect(screen, 5, Game.HEIGHT - MINIGAME_HEIGHT*16 - 5, MINIGAME_WIDTH * 16, MINIGAME_HEIGHT * 16);
-		}
+		}	
 
+		
+		//Font.renderFrame(screen, "", 4, 1, 32, 20);
 		Font.renderFrame(screen, "", 8, 6, 28, 17,
 				DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR,
 				DEFAULT_TITLE_COLOR);
@@ -114,6 +128,8 @@ public class TitleMenu extends Menu {
 					screen.render(xo + x * 8, yo + y * 8, x + (y + 6) * 32, titleColor, 0);
 				}
 			}
+			// version
+			//Font.draw("v"+Game.VERSION, screen, 2, 2, Color.get(0, 111, 111, 111));
 		}
 
 		// options
@@ -124,7 +140,9 @@ public class TitleMenu extends Menu {
 				msg = "> " + msg + " <";
 				col = Color.get(-1, 555, 555, 555);
 			}
-			Font.draw(msg, screen, (screen.w - msg.length() * 8) / 2, (8 + i) * 12 - 22, col);
+			Font.draw(msg, screen, (screen.w - msg.length() * 8) / 2, (8 + i) * 12 - 10, col);
 		}
+		Font.draw("An update is", screen, 103, screen.h - 145, DEFAULT_TITLE_COLOR);
+		Font.draw("avaliable", screen, 114, screen.h - 135, DEFAULT_TITLE_COLOR);
 	}
 }

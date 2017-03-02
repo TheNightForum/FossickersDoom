@@ -10,29 +10,29 @@ public class DialogMenu extends Menu {
 	public static int DEFAULT_TITLE_COLOR = Color.get(112, 445, 445, 445);
 	public static int DEFAULT_BACKGROUND_COLOR = Color.get(112, 112, 112, 112);
 	public static int DEFAULT_BORDER_COLOR = Color.get(-1, 2, 112, 445);
-	
+
 	private int inputDelay = 60;
 
 	protected String text;
 	protected String title;
-	
+
 	public DialogMenu() {
 	}
-	
+
 	public DialogMenu(String text) {
 		this.text = text;
 	}
-	
+
 	public DialogMenu(String text, String title) {
 		this.text = text;
 		this.title = title;
 	}
-	
+
 	public void setText(String text)
 	{
 		this.text = text;
 	}
-	
+
 	public void setTitle(String title)
 	{
 		this.title = title;
@@ -48,9 +48,9 @@ public class DialogMenu extends Menu {
 
 	public void render(Screen screen)
 	{
-		renderTextBox(text, screen, 16, 16, screen.w-32, screen.h-48);	
+		renderTextBox(text, screen, 16, 16, screen.w-32, screen.h-48);
 	}
-	
+
 	protected void renderTextBox(String msg, Screen screen, int x, int y,
 			int w, int h)
 	{
@@ -65,5 +65,5 @@ public class DialogMenu extends Menu {
 		Font.drawFitted(text, screen, x0+padding, y0+padding + 5,
 				x1-x0-padding*2, y1-y0-padding*2-10, DEFAULT_TEXT_COLOR);
 	}
-	
+
 }

@@ -43,6 +43,7 @@ public class InputHandler implements KeyListener {
 	public Key menu = new Key();
 	public Key save = new Key();
 	public Key load = new Key();
+	public Key close = new Key();
 
 	public void releaseAll() {
 		for (int i = 0; i < keys.size(); i++) {
@@ -93,9 +94,10 @@ public class InputHandler implements KeyListener {
 
 		if (ke.getKeyCode() == KeyEvent.VK_X) menu.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_C) attack.toggle(pressed);
-		
+
 		if (ke.getKeyCode() == KeyEvent.VK_F5) save.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_F9) load.toggle(pressed);
+		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) close.toggle(pressed);
 	}
 
 	public void keyTyped(KeyEvent ke) {
