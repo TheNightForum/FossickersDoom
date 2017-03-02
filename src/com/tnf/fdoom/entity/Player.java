@@ -18,6 +18,7 @@ import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
 import com.tnf.fdoom.screen.InventoryMenu;
 import com.tnf.fdoom.sound.Sound;
+import com.tnf.fdoom.screen.PauseMenu;
 
 public class Player extends LivingEntity {
 	private InputHandler input;
@@ -141,6 +142,7 @@ public class Player extends LivingEntity {
 		if (input.load.clicked) {
 			//GameContainer.getInstance().loadGame();
 		}
+		if (input.close.clicked) game.setMenu(new PauseMenu());
 		if (attackTime > 0) attackTime--;
 
 	}
