@@ -72,7 +72,9 @@ public class PlayMenu extends Menu {
 			}
 			if (selected == 1) {
 				Sound.test.play();
-				//game.setMenu(new SetupMenu(this));
+				GeneratorMenu gen = new GeneratorMenu(this);
+				gen.init(game, input);
+				game.setMenu(gen);
 			}
 			if (selected == 2) {
 				Sound.test.play();
