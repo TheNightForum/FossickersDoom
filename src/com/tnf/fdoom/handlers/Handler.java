@@ -18,16 +18,22 @@ public class Handler
   public static String Result = "";
 
   private static final String FirstTime = "First_Time";
-  private static final String FOW = "Fog_Of_War";
+  public static final String FOW = "Fog_Of_War";
   private static final String UsingLauncher = "Using_Launcher";
+  private static final String LastWorld = "Last_World";
+  private static final String CurrentWorld = "Current_World";
+  private static final String PlayerName = "Player_Name";
 
   public static void main(){
     runChecks();
     setImages();
     checkInternet();
     if(isInternet){
+      Logger.printLine("There is internet.");
       isGameUpToDate();
       getLatestGameVersion();
+    }else{
+      Logger.printLine("There is no internet.", Logger.WARNING);
     }
     if (isGameUpToDate() == 1) needsUpdate = true;
     else if (isGameUpToDate() == 0) needsUpdate = false;
@@ -56,7 +62,7 @@ public class Handler
           }
       }
   }
-  private static String readConfig(String toRead){
+  public static String readConfig(String toRead){
       Properties prop = new Properties();
       InputStream input = null;
 
@@ -86,8 +92,11 @@ public class Handler
       if (!file.exists()) {
         file.createNewFile();
         writeConfig(FirstTime, "true");
+        writeConfig(PlayerName, "null");
         writeConfig(UsingLauncher, "false");
         writeConfig(FOW, "true");
+        writeConfig(LastWorld, "null");
+        writeConfig(CurrentWorld, "null");
       }
     }catch (IOException e){
       Logger.printLine("Oh no, could not create the options file.", Logger.ERROR);

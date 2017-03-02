@@ -25,6 +25,7 @@ import com.tnf.fdoom.screen.LevelTransitionMenu;
 import com.tnf.fdoom.screen.Menu;
 import com.tnf.fdoom.screen.TitleMenu;
 import com.tnf.fdoom.screen.WonMenu;
+import com.tnf.fdoom.handlers.Handler;
 
 public class Game extends Canvas implements Runnable, Externalizable
 {
@@ -338,7 +339,8 @@ public class Game extends Canvas implements Runnable, Externalizable
 		level.renderLight(lightScreen, xScroll, yScroll);
 
 		// render fog-of-war
-		if (!setup.disableFogOfWar) {
+		Handler.readConfig(Handler.FOW);
+		if (Boolean.valueOf(Handler.Result)) {
 			fogScreen.clear(0);
 			level.renderFog(fogScreen, lightScreen, xScroll, yScroll);
 			screen.overlay(fogScreen, xScroll, yScroll);
