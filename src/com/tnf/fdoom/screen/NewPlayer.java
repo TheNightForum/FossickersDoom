@@ -1,46 +1,29 @@
 package com.tnf.fdoom.screen;
 
-import com.tnf.fdoom.Game;
 import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Screen;
-import com.tnf.fdoom.sound.Sound;
-import com.tnf.fdoom.handlers.Logger;
-import com.tnf.fdoom.handlers.Handler;
 import com.tnf.fdoom.handlers.Data;
+import com.tnf.fdoom.handlers.Handler;
+import com.tnf.fdoom.sound.Sound;
 
 import java.io.File;
 
-public class NewGameMenu extends Menu {
-  public static final int MINIGAME_WIDTH = Game.WIDTH >> 4;
-    public static final int MINIGAME_HEIGHT = Game.HEIGHT >> 4;
+public class NewPlayer extends Menu {
     private String name = "";
-    private static String Header = "World Name.";
+    private static String Header = "Username.";
     private static boolean running = true;
     private int wncol = Color.get(-1, 0, Color.rgb(0, 0, 0), Color.rgb(255, 0, 0));
-    public static int DEFAULT_TEXT_COLOR = Color.get(-1, 555, 555, 555);
-    public static int DEFAULT_TITLE_COLOR = Color.get(112, 445, 445, 445);
-    public static int DEFAULT_BACKGROUND_COLOR = Color.get(112, 112, 112, 112);
-    public static int DEFAULT_BORDER_COLOR = Color.get(-1, 2, 112, 445);
 
 
     public void tick() {
     	if (running){
     		this.typecode();
     		if (input.enter.clicked){
-          File f = new File(Data.locationSaves + name);
-          if (!f.exists()){
-            f.mkdirs();
-            Handler.writeConfig(Handler.CurrentWorld, String.valueOf(name));
-            Handler.writeConfig(Handler.LastWorld, String.valueOf(name));
-            Sound.test.play();
-				    GeneratorMenu gen = new GeneratorMenu(this);
-				    gen.init(game, input);
-				    game.setMenu(gen);
-          }
+                Handler.writeConfig(Handler.PlayerName, name);
     			this.name = "";
     		}
-        if (input.close.clicked){
+        if (input.escape.clicked){
           game.setMenu(new TitleMenu());
         }
     	}

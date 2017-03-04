@@ -12,11 +12,9 @@ import java.util.Random;
 
 import com.tnf.fdoom.Game;
 import com.tnf.fdoom.GameContainer;
-import com.tnf.fdoom.entity.AirWizard;
 import com.tnf.fdoom.entity.Entity;
 import com.tnf.fdoom.entity.LivingEntity;
 import com.tnf.fdoom.entity.Player;
-import com.tnf.fdoom.entity.Slime;
 import com.tnf.fdoom.entity.Wanderer;
 import com.tnf.fdoom.entity.Zombie;
 import com.tnf.fdoom.gfx.Color;
@@ -39,7 +37,7 @@ public class Level implements Externalizable
 	public int grassColor = 141;
 	public int dirtColor = 322;
 	public int sandColor = 550;
-	private int depth;
+	public int depth;
 	public int monsterDensity = 8;
 
 	private int dayFog = 0;
@@ -88,18 +86,9 @@ public class Level implements Externalizable
 			for (int y = 0; y < h; y++)
 				for (int x = 0; x < w; x++) {
 					if (parentLevel.getTile(x, y) == Tile.stairsDown) {
-
-						setTile(x, y, Tile.stairsUp, 0);
-						if (level == 0) {
-							setTile(x - 1, y, Tile.hardRock, 0);
-							setTile(x + 1, y, Tile.hardRock, 0);
-							setTile(x, y - 1, Tile.hardRock, 0);
-							setTile(x, y + 1, Tile.hardRock, 0);
-							setTile(x - 1, y - 1, Tile.hardRock, 0);
-							setTile(x - 1, y + 1, Tile.hardRock, 0);
-							setTile(x + 1, y - 1, Tile.hardRock, 0);
-							setTile(x + 1, y + 1, Tile.hardRock, 0);
-						} else {
+						//GameContainer.Logger(java.util.logging.Level.INFO,"Spawning the stairs");
+						//setTile(x, y, Tile.stairsUp, 0);
+						if (level == -1) {
 							setTile(x - 1, y, Tile.dirt, 0);
 							setTile(x + 1, y, Tile.dirt, 0);
 							setTile(x, y - 1, Tile.dirt, 0);
@@ -119,12 +108,12 @@ public class Level implements Externalizable
 			entitiesInTiles[i] = new ArrayList<Entity>();
 		}
 		
-		if (level==1) {
+		/*if (level==1) {
 			AirWizard aw = new AirWizard();
 			aw.x = w*8;
 			aw.y = h*8;
 			add(aw);
-		}
+		}*/
 	}
 
 	public void renderBackground(Screen screen, int xScroll, int yScroll) {
@@ -393,6 +382,7 @@ public class Level implements Externalizable
 	}
 
 	public void trySpawn(int count) {
+		
 		for (int i = 0; i < count; i++) {
 			LivingEntity ent;
 
@@ -409,13 +399,13 @@ public class Level implements Externalizable
 			int type = random.nextInt(5);
 			switch (type) {
 				default:
-				case 0:
+				/*case 0:
 					ent = new Slime(lvl);
-					break;
-				case 1:
+					break;*/
+				case 0:
 					ent = new Zombie(lvl);
 					break;
-				case 2:
+				case 1:
 					ent = new Wanderer(lvl);
 					break;
 			}

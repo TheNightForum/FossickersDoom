@@ -27,7 +27,7 @@ public class FarmTile extends Tile {
 			ToolItem tool = (ToolItem) item;
 			if (ToolType.shovel.equals(tool.type)) {
 				if (player.payStamina(4 - tool.level)) {
-					level.setTile(xt, yt, dirt, 0);
+					level.setTile(xt, yt, Tile.dirt, 0);
 					return true;
 				}
 			}
@@ -43,6 +43,6 @@ public class FarmTile extends Tile {
 	public void steppedOn(Level level, int xt, int yt, Entity entity) {
 		if (random.nextInt(60) != 0) return;
 		if (level.getData(xt, yt) < 5) return;
-		level.setTile(xt, yt, dirt, 0);
+		level.setTile(xt, yt, Tile.dirt, 0);
 	}
 }

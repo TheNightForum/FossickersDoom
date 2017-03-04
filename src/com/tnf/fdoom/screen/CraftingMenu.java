@@ -38,7 +38,7 @@ public class CraftingMenu extends Menu {
 	}
 
 	public void tick() {
-		if (input.menu.clicked) game.setMenu((Menu) null);
+		if (input.menu.clicked) game.setMenu(null);
 
 		if (input.up.clicked) selected--;
 		if (input.down.clicked) selected++;

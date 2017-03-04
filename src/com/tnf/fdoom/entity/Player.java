@@ -6,7 +6,6 @@ import java.io.ObjectOutput;
 import java.util.List;
 
 import com.tnf.fdoom.Game;
-import com.tnf.fdoom.GameContainer;
 import com.tnf.fdoom.InputHandler;
 import com.tnf.fdoom.entity.particle.TextParticle;
 import com.tnf.fdoom.gfx.Color;
@@ -14,11 +13,13 @@ import com.tnf.fdoom.gfx.Screen;
 import com.tnf.fdoom.item.FurnitureItem;
 import com.tnf.fdoom.item.Item;
 import com.tnf.fdoom.item.PowerGloveItem;
+import com.tnf.fdoom.item.ResourceItem;
+import com.tnf.fdoom.item.resource.Resource;
 import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
 import com.tnf.fdoom.screen.InventoryMenu;
-import com.tnf.fdoom.sound.Sound;
 import com.tnf.fdoom.screen.PauseMenu;
+import com.tnf.fdoom.sound.Sound;
 
 public class Player extends LivingEntity {
 	private InputHandler input;
@@ -28,6 +29,7 @@ public class Player extends LivingEntity {
 	public Inventory inventory = new Inventory();
 	public Item attackItem;
 	public Item activeItem;
+	public int color;
 	public int stamina;
 	public int staminaRecharge;
 	public int staminaRechargeDelay;
@@ -37,9 +39,9 @@ public class Player extends LivingEntity {
 	public int invulnerableTime = 0;
 
 	public Player() {
-
+		
 	}
-
+	
 	public Player(Game game, InputHandler input) {
 		this.game = game;
 		this.input = input;
@@ -47,28 +49,32 @@ public class Player extends LivingEntity {
 		y = 24;
 		stamina = maxStamina;
 
-		inventory.add(new FurnitureItem(new Workbench()));
-		inventory.add(new PowerGloveItem());
-		/*/ Cheats
-		inventory.add(new ResourceItem(Resource.flint, 100));
-		inventory.add(new ResourceItem(Resource.wood, 100));
-		inventory.add(new ResourceItem(Resource.stone, 100));
-		inventory.add(new ResourceItem(Resource.glass, 100));
-		inventory.add(new ResourceItem(Resource.coal, 100));
-		inventory.add(new ResourceItem(Resource.wheat, 100));
-		/**/
+		//TODO do the lighting if the player has a torch with them.
+		
+		if (Game.isDev){
+			inventory.add(new FurnitureItem(new Workbench()));
+			inventory.add(new PowerGloveItem());
+			/* Cheats */
+			inventory.add(new ResourceItem(Resource.flint, 100));
+			inventory.add(new ResourceItem(Resource.wood, 100));
+			inventory.add(new ResourceItem(Resource.stone, 100));
+			inventory.add(new ResourceItem(Resource.glass, 100));
+			inventory.add(new ResourceItem(Resource.coal, 100));
+			inventory.add(new ResourceItem(Resource.wheat, 100));
+
+		}
 	}
 
 	public void setGame(Game game)
 	{
 		this.game = game;
 	}
-
+	
 	public void setInput(InputHandler input)
 	{
 		this.input = input;
 	}
-
+	
 	public void tick() {
 		super.tick();
 
@@ -136,13 +142,8 @@ public class Player extends LivingEntity {
 				game.setMenu(new InventoryMenu(this));
 			}
 		}
-		if (input.save.clicked) {
-			//GameContainer.getInstance().saveGame();
-		}
-		if (input.load.clicked) {
-			//GameContainer.getInstance().loadGame();
-		}
-		if (input.close.clicked) game.setMenu(new PauseMenu());
+		
+		if (input.escape.clicked) game.setMenu(new PauseMenu());
 		if (attackTime > 0) attackTime--;
 
 	}
@@ -185,7 +186,7 @@ public class Player extends LivingEntity {
 			if (dir == 3 && interact(x + 4, y - 8 + yo, x + range, y + 8 + yo)) done = true;
 			if (dir == 2 && interact(x - range, y - 8 + yo, x - 4, y + 8 + yo)) done = true;
 			if (done) return;
-
+	
 			int xt = x >> 4;
 			int yt = (y + yo) >> 4;
 			int r = 12;
@@ -193,7 +194,7 @@ public class Player extends LivingEntity {
 			if (attackDir == 1) yt = (y - r + yo) >> 4;
 			if (attackDir == 2) xt = (x - r) >> 4;
 			if (attackDir == 3) xt = (x + r) >> 4;
-
+	
 			if (xt >= 0 && yt >= 0 && xt < level.w && yt < level.h) {
 				if (activeItem != null && activeItem.interactOn(level.getTile(xt, yt), level, xt, yt, this, attackDir)) {
 					done = true;
@@ -423,7 +424,7 @@ public class Player extends LivingEntity {
 		level.player.invulnerableTime = 60 * 5;
 		game.won();
 	}
-
+	
 	@Override
 	public void readExternal(ObjectInput in) throws IOException,
 			ClassNotFoundException
@@ -442,7 +443,7 @@ public class Player extends LivingEntity {
 		onStairDelay = in.readInt();
 		invulnerableTime = in.readInt();
 	}
-
+	
 	@Override
 	public void writeExternal(ObjectOutput out) throws IOException
 	{

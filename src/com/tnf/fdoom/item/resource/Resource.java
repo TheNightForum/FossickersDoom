@@ -1,19 +1,26 @@
 package com.tnf.fdoom.item.resource;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.Random;
 
+import com.tnf.fdoom.Game;
 import com.tnf.fdoom.entity.Fire;
 import com.tnf.fdoom.entity.Player;
 import com.tnf.fdoom.entity.Torch;
 import com.tnf.fdoom.entity.particle.TextParticle;
 import com.tnf.fdoom.gfx.Color;
+import com.tnf.fdoom.gfx.SpriteSheet;
 import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
 
 public class Resource implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
+	private static HashMap<String, Resource> resources = new HashMap<String, Resource>();
+	
+	public static Resource mshrm = new Resource("star", 11, Color.get(-1, 110, 440, 440), Game.ultimateSheet);
+	public static Resource arrow = new Resource("Arrow", 33, Color.get(-1, 555, 555, 321), Game.ultimateSheet);
 	
 	public static Resource wood = new Resource("Wood", 1 + 4 * 32, Color.get(-1, 300, 421, 321));
 	public static Resource stone = new Resource("Stone", 2 + 4 * 32, Color.get(-1, 111, 333, 555));
@@ -26,6 +33,7 @@ public class Resource implements Serializable {
 	public static Resource wheat = new Resource("Wheat", 6 + 4 * 32, Color.get(-1, 110, 330, 550));
 	public static Resource bread = new FoodResource("Bread", 8 + 4 * 32, Color.get(-1, 110, 330, 550), 2, 5);
 	public static Resource apple = new FoodResource("Apple", 9 + 4 * 32, Color.get(-1, 100, 300, 500), 1, 5);
+	public static Resource mshr = new FoodResource("Mushy", 9 + 4 * 32, Color.get(-1, 100, 300, 500), Game.ultimateSheet, 1, 5);
 
 	public static Resource coal = new Resource("COAL", 10 + 4 * 32, Color.get(-1, 000, 111, 111));
 	public static Resource ironOre = new Resource("I.ORE", 10 + 4 * 32, Color.get(-1, 100, 322, 544));
@@ -53,7 +61,16 @@ public class Resource implements Serializable {
 	public final String name;
 	public final int sprite;
 	public final int color;
+	public SpriteSheet sheet;
 
+	public Resource(String name, int sprite, int color, SpriteSheet sheet) {
+		if (name.length() > 6) throw new RuntimeException("Name cannot be longer than six characters!");
+		this.name = name;
+		this.sprite = sprite;
+		this.color = color;
+		this.sheet = sheet;
+	}
+	
 	public Resource(String name, int sprite, int color) {
 		if (name.length() > 6) throw new RuntimeException("Name cannot be longer than six characters!");
 		this.name = name;

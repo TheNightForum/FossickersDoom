@@ -1,15 +1,13 @@
 package com.tnf.fdoom.handlers;
 
 
+import com.tnf.fdoom.Game;
+
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-
 import java.net.URLConnection;
 import java.util.Properties;
-
-import com.tnf.fdoom.Game;
-import com.tnf.fdoom.handlers.Logger;
 
 public class Handler
 {
@@ -22,7 +20,8 @@ public class Handler
   private static final String UsingLauncher = "Using_Launcher";
   public static final String LastWorld = "Last_World";
   public static final String CurrentWorld = "Current_World";
-  private static final String PlayerName = "Player_Name";
+  public static final String PlayerName = "Player_Name";
+  public static final String Difficulty = "Difficulty";
 
   public static void main(){
     runChecks();
@@ -32,11 +31,12 @@ public class Handler
       Logger.printLine("There is internet.");
       isGameUpToDate();
       getLatestGameVersion();
+      if (isGameUpToDate() == 1) needsUpdate = true;
+      else if (isGameUpToDate() == 0) needsUpdate = false;
     }else{
       Logger.printLine("There is no internet.", Logger.WARNING);
     }
-    if (isGameUpToDate() == 1) needsUpdate = true;
-    else if (isGameUpToDate() == 0) needsUpdate = false;
+
   }
   public static void writeConfig(String option, String newSetting ) {
       OutputStream out = null;
@@ -96,6 +96,7 @@ public class Handler
         writeConfig(FOW, "true");
         writeConfig(LastWorld, "null");
         writeConfig(CurrentWorld, "null");
+        writeConfig(Difficulty, "1");
       }
     }catch (IOException e){
       Logger.printLine("Oh no, could not create the options file.", Logger.ERROR);
@@ -114,27 +115,30 @@ public class Handler
       isInternet = false;
     }
   }
+  private static int isGameUpToDate() {
+    String lVersion = getLatestGameVersion();
+    return lVersion.equals("Could not connect to webserver.") ? -1:Game.VERSION.equalsIgnoreCase(getLatestGameVersion()) ? 0:1;
+  }
 
-    private static int isGameUpToDate() {
-		String lVersion = getLatestGameVersion();
-		return lVersion.equals("Could not connect to webserver.") ? -1:Game.VERSION.equalsIgnoreCase(getLatestGameVersion()) ? 0:1;
-	}
-
-    private static String getLatestGameVersion() {
-        try {
-            Connection c = new Connection(new URL(Data.BaseUrl + "Games/fdoom/version"));
-            c.createConnection();
-            for(String s : c.readURL()) {
-                return s.trim();
-            }
-        } catch (MalformedURLException ex) {
-          Logger.printLine("Could not connect to webserver", Logger.WARNING);
-          return "Could not connect to webserver.";
-        } catch (IOException ex) {
-          Logger.printLine("Could not connect to webserver", Logger.WARNING);
-          return "Could not connect to webserver.";
+  private static String getLatestGameVersion() {
+    try {
+        Connection c = new Connection(new URL(Data.BaseUrl + "Games/fdoom/version"));
+        c.createConnection();
+        for(String s : c.readURL()) {
+            return s.trim();
         }
-        return Game.VERSION;
+    } catch (MalformedURLException ex) {
+        Logger.printLine("Could not connect to webserver", Logger.WARNING);
+        return "Could not connect to webserver.";
+    } catch (IOException ex) {
+        Logger.printLine("Could not connect to webserver", Logger.WARNING);
+        return "Could not connect to webserver.";
     }
+      return Game.VERSION;
+  }
+
+  public static void getUpdates(){
+
+  }
 
 }

@@ -6,9 +6,9 @@ import com.tnf.fdoom.screen.CraftingMenu;
 
 /**
  * 		Brewery
- *
+ * 
  * Enables the player to brew ale (maybe other things in the future).
- *
+ * 
  * @author CrazyWolf
  */
 public class Brewery extends Furniture {

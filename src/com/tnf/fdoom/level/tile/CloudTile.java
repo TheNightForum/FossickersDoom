@@ -21,15 +21,15 @@ public class CloudTile extends Tile {
 		int col = Color.get(444, 444, 555, 555);
 		int transitionColor = Color.get(333, 444, 555, -1);
 
-		boolean u = level.getTile(x, y - 1) == infiniteFall;
-		boolean d = level.getTile(x, y + 1) == infiniteFall;
-		boolean l = level.getTile(x - 1, y) == infiniteFall;
-		boolean r = level.getTile(x + 1, y) == infiniteFall;
+		boolean u = level.getTile(x, y - 1) == Tile.infiniteFall;
+		boolean d = level.getTile(x, y + 1) == Tile.infiniteFall;
+		boolean l = level.getTile(x - 1, y) == Tile.infiniteFall;
+		boolean r = level.getTile(x + 1, y) == Tile.infiniteFall;
 
-		boolean ul = level.getTile(x - 1, y - 1) == infiniteFall;
-		boolean dl = level.getTile(x - 1, y + 1) == infiniteFall;
-		boolean ur = level.getTile(x + 1, y - 1) == infiniteFall;
-		boolean dr = level.getTile(x + 1, y + 1) == infiniteFall;
+		boolean ul = level.getTile(x - 1, y - 1) == Tile.infiniteFall;
+		boolean dl = level.getTile(x - 1, y + 1) == Tile.infiniteFall;
+		boolean ur = level.getTile(x + 1, y - 1) == Tile.infiniteFall;
+		boolean dr = level.getTile(x + 1, y + 1) == Tile.infiniteFall;
 
 		if (!u && !l) {
 			if (!ul)

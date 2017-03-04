@@ -42,6 +42,13 @@ public class Inventory implements Serializable {
 		return null;
 	}
 
+	public int getNumOfResources(Resource r)
+	{
+		ResourceItem ri = findResource(r);
+		if (ri == null) return 0;
+		return ri.count;
+	}
+	
 	public boolean hasResources(Resource r, int count) {
 		ResourceItem ri = findResource(r);
 		if (ri == null) return false;

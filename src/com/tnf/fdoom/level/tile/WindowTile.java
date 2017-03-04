@@ -61,7 +61,7 @@ public class WindowTile extends Tile {
 
 	@Override
 	public boolean interact(Level level, int xt, int yt, Player player,
-			Item item, int attackDir)
+                            Item item, int attackDir)
 	{
 		// deconstruct with axe
 		if (item instanceof ToolItem) {

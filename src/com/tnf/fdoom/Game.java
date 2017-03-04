@@ -10,28 +10,27 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
-
 import com.tnf.fdoom.entity.Player;
 import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Screen;
 import com.tnf.fdoom.gfx.SpriteSheet;
+import com.tnf.fdoom.handlers.Handler;
+import com.tnf.fdoom.handlers.Logger;
 import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
 import com.tnf.fdoom.screen.DeadMenu;
 import com.tnf.fdoom.screen.LevelTransitionMenu;
 import com.tnf.fdoom.screen.Menu;
-import com.tnf.fdoom.screen.TitleMenu;
+import com.tnf.fdoom.screen.SplashMenu;
 import com.tnf.fdoom.screen.WonMenu;
-import com.tnf.fdoom.handlers.Handler;
-import com.tnf.fdoom.handlers.Logger;
+
+import javax.imageio.ImageIO;
 
 public class Game extends Canvas implements Runnable, Externalizable
 {
 	private static final long serialVersionUID = 2L;
-
+	
 	private Random random = new Random();
 
 	public static final String NAME = "Fossickers Doom";
@@ -43,13 +42,16 @@ public class Game extends Canvas implements Runnable, Externalizable
 	public static final Boolean isDev = true;
 
 	private GameSetup setup = new GameSetup();
-
+	
 	private BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	private boolean running = false;
-	private Screen screen;
-	private Screen lightScreen;
-	private Screen fogScreen;
+	
+	public static Screen lightScreen;
+	public static Screen fogScreen;
+	public static Screen screen;
+	
+	public static SpriteSheet ultimateSheet;
 	private InputHandler input = new InputHandler(this);
 
 	private int[] colors = new int[256];
@@ -60,7 +62,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 	private Level[] levels = new Level[5];
 	private int currentLevel = 3;
 	public Player player;
-
+	
 	public Menu menu;
 	private int playerDeadTime;
 	private int pendingLevelChange;
@@ -69,24 +71,25 @@ public class Game extends Canvas implements Runnable, Externalizable
 
 	public static final int DAY_LENGTH = 20000;
 
+	
 	public void setMenu(Menu menu) {
 		this.menu = menu;
 		if (menu != null) menu.init(this, input);
 	}
-
+	
 	public GameSetup getSetup()
 	{
 		return this.setup;
 	}
-
+	
 	public void setSetup(GameSetup setup)
 	{
 		this.setup = setup;
 	}
-
+	
 	/**
 	 * Returns the part of the day.
-	 *
+	 * 
 	 * @return 0 is midnight, 0.5 is noon, ...
 	 */
 	public double getDayCycle()
@@ -127,14 +130,19 @@ public class Game extends Canvas implements Runnable, Externalizable
 		level.add(player);
 
 		for (int i = 0; i < 5; i++) {
-			levels[i].trySpawn(5000);
+			int count = 5000;
+			Handler.readConfig(Handler.Difficulty);
+			int num = Integer.valueOf(Handler.Result);
+			count += count * num;
+			if (num == 0) count = 0;
+			levels[i].trySpawn(count);
 		}
 	}
-
+	
 	/**
 	 * Performs a full initialization of the game - graphics, generated levels,
 	 * etc. The result is a fresh new game ready to be played.
-	 *
+	 * 
 	 * This method should NOT be used for loaded games. Loaded games are inited
 	 * as the player starts a new game. After loading them we call initGraphics
 	 * and we are done.
@@ -143,9 +151,11 @@ public class Game extends Canvas implements Runnable, Externalizable
 		initGraphics();
 
 		resetGame();
-		setMenu(new TitleMenu());
+		setMenu(new SplashMenu());
 	}
-
+	
+	
+	
 	/**
 	 * Performs initialization of the game graphics.
 	 */
@@ -167,6 +177,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 				}
 			}
 		}
+		//TODO: Load them from Handler
 		try {
 			screen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
 			lightScreen = new Screen(WIDTH, HEIGHT, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
@@ -174,6 +185,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		//create();
 	}
 
 	public void run() {
@@ -195,7 +207,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 				unprocessed -= 1;
 				shouldRender = true;
 			}
-
+			
 			if (!running) {
 				shouldRender = false;
 			}
@@ -203,7 +215,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 			try {
 				Thread.sleep(2);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Logger.printLine("Game interrupted, could not finish loading!", Logger.ERROR);
 			}
 
 			if (shouldRender) {
@@ -212,8 +224,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 					render();
 				} catch (IllegalStateException e) {
 					// this is where it gets messed up so we bail out!
-					Logger.printLine("Game thread exiting, rendering failed:", Logger.ERROR);
-					e.printStackTrace();
+					Logger.printLine("Game thread exiting, rendering failed!", Logger.ERROR);
 					running = false;
 					break;
 				}
@@ -230,6 +241,8 @@ public class Game extends Canvas implements Runnable, Externalizable
 
 	public void tick() {
 		tickCount++;
+		//TODO add it here.
+		
 		if (!hasFocus()) {
 			input.releaseAll();
 		} else {
@@ -285,8 +298,9 @@ public class Game extends Canvas implements Runnable, Externalizable
 		renderView();
 
 		renderGui();
-
-		if (!hasFocus()) renderFocusNagger();
+		if(!isDev){
+			if (!hasFocus()) renderFocusNagger();
+		}
 
 		for (int y = 0; y < screen.h; y++) {
 			for (int x = 0; x < screen.w; x++) {
@@ -306,13 +320,13 @@ public class Game extends Canvas implements Runnable, Externalizable
 		g.dispose();
 		bs.show();
 	}
-
+	
 	private void renderView()
 	{
 		if (this.gameTime <= 0) {
 			return;
 		}
-
+		
 		int xScroll = player.x - screen.w / 2;
 		int yScroll = player.y - (screen.h - 8) / 2;
 		// we have a nice border, so the player stays in the center!
@@ -320,7 +334,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 		//if (yScroll < 16) yScroll = 16;
 		//if (xScroll > level.w * 16 - screen.w - 16) xScroll = level.w * 16 - screen.w - 16;
 		//if (yScroll > level.h * 16 - screen.h - 16) yScroll = level.h * 16 - screen.h - 16;
-
+		
 		if (currentLevel > 3) {
 			int col = Color.get(20, 20, 121, 121);
 			for (int y = 0; y < 14; y++)
@@ -331,14 +345,13 @@ public class Game extends Canvas implements Runnable, Externalizable
 
 	    // render level tiles
 		level.renderBackground(screen, xScroll, yScroll);
-
+		
 		// render level sprites
 		level.renderSprites(screen, xScroll, yScroll);
-
+		
 		// prepare light-map
 		lightScreen.clear(0);
 		level.renderLight(lightScreen, xScroll, yScroll);
-
 		// render fog-of-war
 		Handler.readConfig(Handler.FOW);
 		if (Boolean.valueOf(Handler.Result)) {
@@ -346,9 +359,10 @@ public class Game extends Canvas implements Runnable, Externalizable
 			level.renderFog(fogScreen, lightScreen, xScroll, yScroll);
 			screen.overlay(fogScreen, xScroll, yScroll);
 		}
-
+		
 		// render darkness
-		if (currentLevel < 3 && setup.disableFogOfWar) {
+		Handler.readConfig(Handler.FOW);
+		if (currentLevel < 3 && Boolean.valueOf(Handler.Result)) {
 			screen.overlay(lightScreen, xScroll, yScroll);
 		}
 	}
@@ -357,40 +371,45 @@ public class Game extends Canvas implements Runnable, Externalizable
 		if (this.gameTime > 0) {
 			for (int y = 0; y < 2; y++) {
 				for (int x = 0; x < 20; x++) {
-					screen.render(x * 8, screen.h - 16 + y * 8, 0 + 12 * 32, Color.get(000, 000, 000, 000), 0);
+					screen.render(x * 8, screen.h - 16 + y * 8, 0 + 12 * 32, Color.get(-1, -1, -1, -1), 0);
 				}
 			}
-
+	
 			for (int i = 0; i < 10; i++) {
 				if (i < player.health)
-					screen.render(i * 8, screen.h - 16, 0 + 12 * 32, Color.get(000, 200, 500, 533), 0);
+					screen.render(i * 8, screen.h - 200, 0 + 12 * 32, Color.get(-1, 200, 500, 533), 0);
 				else
-					screen.render(i * 8, screen.h - 16, 0 + 12 * 32, Color.get(000, 100, 000, 000), 0);
-
+					screen.render(i * 8, screen.h - 200, 0 + 12 * 32, Color.get(-1, 100, 000, 000), 0);
+	
 				if (player.staminaRechargeDelay > 0) {
 					if (player.staminaRechargeDelay / 4 % 2 == 0)
-						screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 555, 000, 000), 0);
+						screen.render(i * 8, screen.h - 192, 1 + 12 * 32, Color.get(-1, 555, 000, 000), 0);
 					else
-						screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 110, 000, 000), 0);
+						screen.render(i * 8, screen.h - 192, 1 + 12 * 32, Color.get(-1, 110, 000, 000), 0);
 				} else {
 					if (i < player.stamina)
-						screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 220, 550, 553), 0);
+						screen.render(i * 8, screen.h - 192, 1 + 12 * 32, Color.get(-1, 220, 550, 553), 0);
 					else
-						screen.render(i * 8, screen.h - 8, 1 + 12 * 32, Color.get(000, 110, 000, 000), 0);
+						screen.render(i * 8, screen.h - 192, 1 + 12 * 32, Color.get(-1, 110, 000, 000), 0);
 				}
 			}
 			if (player.activeItem != null) {
-				player.activeItem.renderInventory(screen, 10 * 8, screen.h - 16);
+				for (int x = 0; x <= this.player.activeItem.getName().length(); ++x) {
+	                //this.screen.render(x * 8 + 80, this.screen.h - 8, 384, Color.get(0, 0, 0, 0), 0); // This is the old one...
+					this.screen.render(x * 8, this.screen.h -8, 384, Color.get(0, 0, 0, 0), 0);
+				}
+				//player.activeItem.renderInventory(screen, 10 * 8, screen.h - 8); // This is the old one...
+				player.activeItem.renderInventory(screen, 0, screen.h - 8);
 			}
 		}
-
+		
 		if (menu != null) {
 			menu.render(screen);
 		}
 	}
 
 	private void renderFocusNagger() {
-		String msg = "Game Paused!";
+		String msg = "GAME PAUSED!";
 		int xx = (WIDTH - msg.length() * 8) / 2;
 		int yy = (HEIGHT - 8) / 2;
 		int w = msg.length();
@@ -427,7 +446,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 
 	/**
 	 * Called after loading a saved game.
-	 *
+	 * 
 	 * This method is responsible for bringing a newly de-serialized game
 	 * back to life.
 	 */
@@ -447,9 +466,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 		this.level = (Level)in.readObject();
 		this.levels = (Level[])in.readObject();
 		this.lightScreen = (Screen)in.readObject();
-		this.menu = (Menu)in.readObject();
 		this.pendingLevelChange = in.readInt();
-		//this.pixels = (int[])in.readObject(); // generated in initGraphics()
 		this.player = (Player)in.readObject();
 		this.playerDeadTime = in.readInt();
 		this.tickCount = in.readInt();
@@ -457,7 +474,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 		this.running = in.readBoolean();
 		this.setup = (GameSetup)in.readObject();
 		this.screen = (Screen)in.readObject();
-
+		
 		this.player.setGame(this);
 		this.player.setInput(this.input);
 	}
@@ -472,9 +489,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 		out.writeObject(this.level);
 		out.writeObject(this.levels);
 		out.writeObject(this.lightScreen);
-		out.writeObject(this.menu);
 		out.writeInt(this.pendingLevelChange);
-		//out.writeObject(this.pixels); // generated in initGraphics()
 		out.writeObject(this.player);
 		out.writeInt(this.playerDeadTime);
 		out.writeInt(this.tickCount);

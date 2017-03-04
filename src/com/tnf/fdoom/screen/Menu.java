@@ -22,11 +22,11 @@ public class Menu {
 
 	public void render(Screen screen) {
 	}
-	
-	public int centertext(final String name) {
-		return (288 - name.length() * 8) / 2;
-	}
 
+	 public int centertext(final String name) {
+		 return (288 - name.length() * 8) / 2;
+	 }
+	
 	public void renderItemList(Screen screen, int xo, int yo, int x1, int y1, List<? extends ListItem> listItems, int selected) {
 		boolean renderCursor = true;
 		if (selected < 0) {

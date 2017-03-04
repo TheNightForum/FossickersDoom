@@ -2,10 +2,11 @@ package com.tnf.fdoom.gfx;
 
 public class Font {
 	private static final String EMPTY_CHAR = "b";
-	private static String chars = "" + //
+	static String chars = "" + //
 			"ABCDEFGHIJKLMNOPQRSTUVWXYZ      " + //
 			"0123456789.,!?'\"-+=/\\%()<>:;  \n"+EMPTY_CHAR + //
 			"";
+	
 
 	public static final int CHAR_WIDTH = 8;
 	public static final int LINE_HEIGHT = CHAR_WIDTH + 2; 

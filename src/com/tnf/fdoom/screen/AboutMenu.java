@@ -6,10 +6,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.imageio.ImageIO;
 
 import com.tnf.fdoom.Game;
+import com.tnf.fdoom.GameContainer;
 import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Screen;
 import com.tnf.fdoom.gfx.SpriteSheet;
+import com.tnf.fdoom.handlers.Logger;
 import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
 
@@ -23,6 +25,7 @@ public class AboutMenu extends Menu {
 	private int tickCount;
 	
 	private AtomicBoolean miniLoaded;
+
 	
 	public AboutMenu(Menu parent) {
 		this.parent = parent;
@@ -42,11 +45,11 @@ public class AboutMenu extends Menu {
 			};
 		};
 		thread.start();
-		
+
 		try {
 			miniScreen = new Screen(MINIGAME_WIDTH * 16, MINIGAME_HEIGHT * 16, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.printLine("Somehow, we have managed to lose the res files. Could not load the menus. This is going to be fatal.", Logger.ERROR);
 		}
 	}
 
@@ -65,14 +68,14 @@ public class AboutMenu extends Menu {
 		screen.clear(0);
 
 		int marginX = 10;
-		Font.draw("About Alecraft", screen, 	marginX + 4 * 8 + 4, 1 * 8, Color.get(0, 555, 555, 555));
-		Font.drawFitted("Based on code of Minicraft by\n" +
-				" Markus \"Notch\" Persson, 2011.\n\n" +
-				"Modded and enhanced by\n David \"Dejvino\" Nemecek, 2011-2012",
-			screen,
-			marginX +  0 * 8 + 4, 3 * 8,
-			screen.w - 2*marginX, screen.h - 100,
-			Color.get(0, 333, 333, 333));
+		Font.draw("About FossickersDoom", screen, 	marginX + 4 * 8 + 4, 1 * 8, Color.get(0, 555, 555, 555));
+		//Font.drawFitted("Based on code of Minicraft by\n" +
+		//		" Markus \"Notch\" Persson, 2011.\n\n" +
+		//		"Modded and enhanced by\n David \"Dejvino\" Nemecek, 2011-2012",
+		//	screen,
+		//	marginX +  0 * 8 + 4, 3 * 8,
+		//	screen.w - 2*marginX, screen.h - 100,
+		//	Color.get(0, 333, 333, 333));
 		
 		if (miniLoaded.get()) {
 			int xScroll = (int)(Math.cos((tickCount / 10000.0) * 2*Math.PI) * (miniGame.w * 8) / 2) + (miniGame.w * 8) / 2 + MINIGAME_WIDTH * 16 / 2;

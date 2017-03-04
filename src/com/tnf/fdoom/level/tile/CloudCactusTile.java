@@ -53,7 +53,7 @@ public class CloudCactusTile extends Tile {
 		level.add(new TextParticle("" + dmg, x * 16 + 8, y * 16 + 8, Color.get(-1, 500, 500, 500)));
 		if (dmg > 0) {
 			if (damage >= 10) {
-				level.setTile(x, y, cloud, 0);
+				level.setTile(x, y, Tile.cloud, 0);
 			} else {
 				level.setData(x, y, damage);
 			}

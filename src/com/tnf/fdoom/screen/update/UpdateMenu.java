@@ -1,8 +1,6 @@
-package com.tnf.fdoom.screen;
+package com.tnf.fdoom.screen.update;
 
 import java.io.IOException;
-
-import java.util.Calendar;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.imageio.ImageIO;
@@ -12,10 +10,14 @@ import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Screen;
 import com.tnf.fdoom.gfx.SpriteSheet;
+import com.tnf.fdoom.handlers.Handler;
 import com.tnf.fdoom.handlers.Logger;
+import com.tnf.fdoom.screen.NewPlayer;
 import com.tnf.fdoom.sound.Sound;
 import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
+import com.tnf.fdoom.screen.Menu;
+import com.tnf.fdoom.screen.TitleMenu;
 
 public class UpdateMenu extends Menu {
 	private int selected = 0;
@@ -24,9 +26,7 @@ public class UpdateMenu extends Menu {
 	private Level miniGame;
 	private Screen miniScreen;
 	private int tickCount;
-	
-	
-	public static int DEFAULT_TEXT_COLOR = Color.get(-1, 555, 555, 555);
+
 	public static int DEFAULT_TITLE_COLOR = Color.get(112, 445, 445, 445);
 	public static int DEFAULT_BACKGROUND_COLOR = Color.get(112, 112, 112, 112);
 	public static int DEFAULT_BORDER_COLOR = Color.get(-1, 2, 112, 445);
@@ -38,36 +38,26 @@ public class UpdateMenu extends Menu {
 
 	
 	public UpdateMenu() {
-		
-		Calendar var1 = Calendar.getInstance();
-		
-		if(var1.get(2) + 1 == 12 && var1.get(5) >= 20 && var1.get(5) <= 26)
-		{
-			//this.isChristmas = true;
-		}
-		
-		// generate a game in the background
-				miniLoaded = new AtomicBoolean();
-				miniLoaded.set(false);
-				Thread thread = new Thread() {
-					public void run() {
-						miniGame = new Level(128, 128, 0, null);
-						miniGame.trySpawn(10000);
-						// simulate some history
-						for (int i = 0; i < 1000; i++) {
-							miniGame.tick();
-						}
-						miniLoaded.set(true);
-					};
-				};
-				thread.start();
-				
-				try {
-					miniScreen = new Screen(MINIGAME_WIDTH * 16, MINIGAME_HEIGHT * 16, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
-				} catch (IOException e) {
-					e.printStackTrace();
-					Logger.printLine("Oh no. Could not load Sprite for game...", Logger.ERROR);
+		miniLoaded = new AtomicBoolean();
+		miniLoaded.set(false);
+		Thread thread = new Thread() {
+			public void run() {
+				miniGame = new Level(128, 128, 0, null);
+				miniGame.trySpawn(10000);
+				// simulate some history
+				for (int i = 0; i < 1000; i++) {
+					miniGame.tick();
 				}
+				miniLoaded.set(true);
+			};
+		};
+		thread.start();
+
+		try {
+			miniScreen = new Screen(MINIGAME_WIDTH * 16, MINIGAME_HEIGHT * 16, new SpriteSheet(ImageIO.read(Game.class.getResourceAsStream("/icons.png"))));
+		} catch (IOException e) {
+			Logger.printLine("Somehow, we have managed to lose the res files. Could not load the menus. This is going to be fatal.", Logger.ERROR);
+		}
 	}
 
 	public void tick() {
@@ -84,14 +74,14 @@ public class UpdateMenu extends Menu {
 		if (input.attack.clicked || input.menu.clicked) {
 			if (selected == 0) {
 				Sound.test.play();
-				//ClientUtils.DownloadUpdates();
-				//this.game.setMenu(new ForceMenu());
+				Handler.getUpdates();
+				this.game.setMenu(new ForceMenu());
 			}
 			if (selected == 1) {
 				Sound.test.play();
-				//if(OptionFile.name.equals("Player")) this.game.setMenu(new NewPlayer(this));
-				//else this.game.setMenu(new TitleMenu());
-				this.game.setMenu(new TitleMenu());
+				Handler.readConfig(Handler.PlayerName);
+				if(Handler.Result.equals("Player")) this.game.setMenu(new NewPlayer());
+				else this.game.setMenu(new TitleMenu());
 			}
 		}
 		if (miniLoaded.get()) {

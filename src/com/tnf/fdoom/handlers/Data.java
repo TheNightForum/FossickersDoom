@@ -1,9 +1,8 @@
 package com.tnf.fdoom.handlers;
 
-import java.io.File;
-
 import com.tnf.fdoom.Game;
-import com.tnf.fdoom.handlers.Logger;
+
+import java.io.File;
 
 public class Data {
 

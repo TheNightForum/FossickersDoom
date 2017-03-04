@@ -43,7 +43,9 @@ public class InputHandler implements KeyListener {
 	public Key menu = new Key();
 	public Key save = new Key();
 	public Key load = new Key();
-	public Key close = new Key();
+	public Key escape = new Key();
+	public Key quick = new Key();
+	public Key map = new Key();
 	public Key a = new Key();
 	public Key b = new Key();
 	public Key c = new Key();
@@ -70,24 +72,23 @@ public class InputHandler implements KeyListener {
 	public Key x = new Key();
 	public Key y = new Key();
 	public Key z = new Key();
-	public Key a1 = new Key();
-	public Key a2 = new Key();
-	public Key a3 = new Key();
-	public Key a4 = new Key();
-	public Key a5 = new Key();
-	public Key a6 = new Key();
-	public Key a7 = new Key();
-	public Key a8 = new Key();
-	public Key a9 = new Key();
-	public Key a0 = new Key();
-	public Key f2 = new Key();
-	public Key f3 = new Key();
-	public Key backspace = new Key();
-	public Key space = new Key();
-	public Key enter = new Key();
-	public Key pause = new Key();
-	public Key stop = new Key();
-
+    public Key a1 = new Key();
+    public Key a2 = new Key();
+    public Key a3 = new Key();
+    public Key a4 = new Key();
+    public Key a5 = new Key();
+    public Key a6 = new Key();
+    public Key a7 = new Key();
+    public Key a8 = new Key();
+    public Key a9 = new Key();
+    public Key a0 = new Key();
+    public Key f2 = new Key();
+    public Key f3 = new Key();
+    public Key backspace = new Key();
+    public Key space = new Key();
+    public Key enter = new Key();
+    public Key pause = new Key();
+	
 	public void releaseAll() {
 		for (int i = 0; i < keys.size(); i++) {
 			keys.get(i).down = false;
@@ -137,11 +138,12 @@ public class InputHandler implements KeyListener {
 
 		if (ke.getKeyCode() == KeyEvent.VK_X) menu.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_C) attack.toggle(pressed);
-
-		if (ke.getKeyCode() == KeyEvent.VK_F5) save.toggle(pressed);
+		
+		if (ke.getKeyCode() == KeyEvent.VK_S) save.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_F9) load.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) close.toggle(pressed);
-
+		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) escape.toggle(pressed);
+		if (ke.getKeyCode() == KeyEvent.VK_M) map.toggle(pressed);
+		
 		if (ke.getKeyCode() == KeyEvent.VK_A) a.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_B) b.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_C) c.toggle(pressed);
@@ -182,7 +184,6 @@ public class InputHandler implements KeyListener {
 		if (ke.getKeyCode() == KeyEvent.VK_SPACE) space.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_ESCAPE) pause.toggle(pressed);
 		if (ke.getKeyCode() == KeyEvent.VK_ENTER) enter.toggle(pressed);
-		if (ke.getKeyCode() == KeyEvent.VK_PERIOD) stop.toggle(pressed);
 	}
 
 	public void keyTyped(KeyEvent ke) {

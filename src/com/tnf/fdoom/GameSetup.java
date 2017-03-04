@@ -11,5 +11,4 @@ public class GameSetup implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
-	public boolean disableFogOfWar = false;
 }

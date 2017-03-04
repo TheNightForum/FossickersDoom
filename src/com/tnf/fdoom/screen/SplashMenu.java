@@ -3,7 +3,6 @@ package com.tnf.fdoom.screen;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Screen;
-import com.tnf.fdoom.handlers.Handler;
 import com.tnf.fdoom.InputHandler;
 
 import com.tnf.fdoom.Game;
@@ -14,38 +13,26 @@ public class SplashMenu extends Menu
     protected InputHandler input;
     private int rdm;
     private int tickc;
-
-
+    
+        
     public SplashMenu() {
-    	//ClientUtils.isClientUpToDate();
-		//ClientUtils.getLatestGameVersion();
         this.tickc = 0;
     }
-
+    
     @Override
     public void init(final Game game, final InputHandler input) {
         this.input = input;
         this.game = game;
     }
-
+    
     @Override
     public void tick() {
         ++this.tickc;
         if (this.tickc >= 200) {
-        	if (!Game.isDev){
-	        	if (Handler.needsUpdate)
-	            {
-	                this.game.setMenu(new UpdateMenu());
-	            }else{
-                    this.game.setMenu(new TitleMenu());
-	            }
-        	}else{
-
-                this.game.setMenu(new TitleMenu());
-        	}
+        	game.setMenu(new TitleMenu());
         }
     }
-
+    
     @Override
     public void render(final Screen screen) {
         int h = 5;
@@ -68,7 +55,6 @@ public class SplashMenu extends Menu
             }
         }
         Font.renderFrame(screen, "", 9, 2, 28, 20);
-        //ORIGINALS: 2, 2, 28, 2
         h = 20;
         w = 28;
         for (int y = 3; y < h; ++y) {
@@ -88,8 +74,5 @@ public class SplashMenu extends Menu
             }
         }
         Font.draw("CrazyWolf", screen, 115, 60, Color.get(-1, 500, 500, 500));
-        //Font.draw("CrazyWolf", screen, 93, 60, Color.get(-1, 500, 500, 500));
-        //Font.draw("Zelosfan", screen, 125, 76, Color.get(-1, 500, 500, 500));
-        //Font.draw("Minicraft: Notch", screen, 87, 140, Color.get(-1, 3, 3, 3));
     }
 }

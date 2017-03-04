@@ -12,12 +12,12 @@ public class GeneratorMenu extends Menu {
 
 	private static AtomicBoolean generatorLocked = new AtomicBoolean();
 	private AtomicBoolean loaded;
-	
+
 	private int ticks;
-	
+
 	public GeneratorMenu(Menu parent) {
 		this.parent = parent;
-		
+
 		// generate a game in the background
 		loaded = new AtomicBoolean();
 		loaded.set(false);
@@ -26,12 +26,12 @@ public class GeneratorMenu extends Menu {
 			public void run() {
 				// generate a new world
 				game.resetGame();
-				
+
 				loaded.set(true);
 				generatorLocked.set(false);
 			};
 		};
-		
+
 		// start only one generator
 		if (generatorLocked.compareAndSet(false, true)) {
 			thread.start();
@@ -44,11 +44,11 @@ public class GeneratorMenu extends Menu {
 			DialogMenu welcome = new DialogMenu();
 			welcome.setTitle("Introduction");
 			welcome.setText("You have awakened.\n\n" +
-				"Why? Where?\nYou have no idea.\n" +
-				"\nThe sun seems to be rising up " +
-				"and your dwarven stomach is in need of some ale.\n" +
-				"\nBut it will be dark again soon so you better find a place to stay. " +
-				"Dark creatures come out at night. Dangerous creatures.");
+					"Why? Where?\nYou have no idea.\n" +
+					"\nThe sun seems to be rising up " +
+					"and your dwarven stomach is in need of some ale.\n" +
+					"\nBut it will be dark again soon so you better find a place to stay. " +
+					"Dark creatures come out at night. Dangerous creatures.");
 			game.setMenu(welcome);
 		}
 	}
@@ -57,7 +57,7 @@ public class GeneratorMenu extends Menu {
 		screen.clear(0);
 
 		int marginX = (screen.w - 160) / 2;
-		
+
 		{ // game title
 			int h = 2;
 			int w = 13;
@@ -70,7 +70,7 @@ public class GeneratorMenu extends Menu {
 				}
 			}
 		}
-		
+
 		{ // logo image
 			int h = 8;
 			int w = 7;
@@ -83,7 +83,7 @@ public class GeneratorMenu extends Menu {
 				}
 			}
 		}
-		
+
 		String dots = "";
 		for (int i = 0; i < ticks/40 % 4; i++) {
 			dots += ".";

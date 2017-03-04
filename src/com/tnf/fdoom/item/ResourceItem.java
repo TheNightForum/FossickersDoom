@@ -19,11 +19,13 @@ public class ResourceItem extends Item {
 	
 	public ResourceItem(Resource resource) {
 		this.resource = resource;
+		this.sheet = resource.sheet;
 	}
 
 	public ResourceItem(Resource resource, int count) {
 		this.resource = resource;
 		this.count = count;
+		this.sheet = resource.sheet;
 	}
 
 	public int getColor() {
@@ -33,6 +35,7 @@ public class ResourceItem extends Item {
 	public int getSprite() {
 		return resource.sprite;
 	}
+	
 
 	public void renderIcon(Screen screen, int x, int y) {
 		screen.render(x, y, resource.sprite, resource.color, 0);

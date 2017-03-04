@@ -1,4 +1,4 @@
-package com.tnf.fdoom.screen;
+package com.tnf.fdoom.screen.update;
 
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -13,8 +13,9 @@ import com.tnf.fdoom.gfx.SpriteSheet;
 import com.tnf.fdoom.handlers.Logger;
 import com.tnf.fdoom.level.Level;
 import com.tnf.fdoom.level.tile.Tile;
+import com.tnf.fdoom.screen.Menu;
 
-public class TitleMenu extends Menu {
+public class ForceMenu extends Menu {
 	private int selected = 0;
 	public static final int MINIGAME_WIDTH = Game.WIDTH >> 4;
 	public static final int MINIGAME_HEIGHT = Game.HEIGHT >> 4;
@@ -28,10 +29,13 @@ public class TitleMenu extends Menu {
 	public static int DEFAULT_BORDER_COLOR = Color.get(-1, 2, 112, 445);
 	
 	private AtomicBoolean miniLoaded;
+
 	
-	private static final String[] options = { "Play", "Options", "Credits", "Quit" };
+	private static final String[] options = { "OK" };
+	//private static final String[] optionsUpdate = { "Start game", "Load game", "UPDATE", "Setup", "About", "Quit" };
 	
-	public TitleMenu() {
+	
+	public ForceMenu() {
 		miniLoaded = new AtomicBoolean();
 		miniLoaded.set(false);
 		Thread thread = new Thread() {
@@ -57,6 +61,7 @@ public class TitleMenu extends Menu {
 	public void tick() {
 		
 		tickCount++;
+		
 		if (input.up.clicked) selected--;
 		if (input.down.clicked) selected++;
 		
@@ -65,29 +70,36 @@ public class TitleMenu extends Menu {
 		if (selected >= len) selected -= len;
 
 		if (input.attack.clicked || input.menu.clicked) {
-			if(selected == 0) game.setMenu(new PlayMenu(this));
-			if(selected == 1) game.setMenu(new OptionsMenu(true));
-			if(selected == 2) game.setMenu(new AboutMenu(this));
-			if(selected == 3) System.exit(0);
+			if (selected == 0) System.exit(0);
 		}
 		
 		if (miniLoaded.get()) {
 			miniGame.tick();
 			Tile.tickCount++;
 		}
-		
 	}
 
 	public void render(Screen screen) {
 		screen.clear(0);
+		int marginX = 10;
 		if (miniLoaded.get()) {
 			int xScroll = (int)(Math.cos((tickCount / 10000.0) * 2*Math.PI) * (miniGame.w * 8) / 2) + (miniGame.w * 8) / 2 + MINIGAME_WIDTH * 16 / 2;
 			int yScroll = (int)(Math.sin((tickCount / 10000.0) * 2*Math.PI) * (miniGame.h * 8) / 2) + (miniGame.h * 8) / 2 + MINIGAME_HEIGHT * 16 / 2;
 			miniGame.renderBackground(miniScreen, xScroll, yScroll);
 			miniGame.renderSprites(miniScreen, xScroll, yScroll);
 			miniScreen.copyRect(screen, 5, Game.HEIGHT - MINIGAME_HEIGHT*16 - 5, MINIGAME_WIDTH * 16, MINIGAME_HEIGHT * 16);
-		} 
+		} else {
+			String dots = "";
+			for (int i = 0; i < tickCount/40 % 4; i++) {
+				dots += ".";
+			}
+			//Font.draw("generating world"+dots, screen, 	marginX +  0 * 8 + 4, 19 * 8, Color.get(0, 522, 522, 522));
+		}
 
+		
+
+		
+		//Font.renderFrame(screen, "", 4, 1, 32, 20);
 		Font.renderFrame(screen, "", 8, 6, 28, 17,
 				DEFAULT_BACKGROUND_COLOR, DEFAULT_BORDER_COLOR,
 				DEFAULT_TITLE_COLOR);
@@ -102,6 +114,8 @@ public class TitleMenu extends Menu {
 					screen.render(xo + x * 8, yo + y * 8, x + (y + 6) * 32, titleColor, 0);
 				}
 			}
+			// version
+			//Font.draw("v"+Game.VERSION, screen, 2, 2, Color.get(0, 111, 111, 111));
 		}
 
 		// options
@@ -112,9 +126,22 @@ public class TitleMenu extends Menu {
 				msg = "> " + msg + " <";
 				col = Color.get(-1, 555, 555, 555);
 			}
-			Font.draw(msg, screen, (screen.w - msg.length() * 8) / 2, (8 + i) * 12 - 22, col);
+			Font.draw(msg, screen, (screen.w - msg.length() * 8) / 2, (8 + i) * 12 - 10, col);
 		}
-	
+		
+		Font.draw("Please Restart", screen, 95, screen.h - 145, DEFAULT_TITLE_COLOR);
+		//Font.draw("avaliable", screen, 114, screen.h - 135, DEFAULT_TITLE_COLOR);
+		
+		// options
+		/**for (int i = 0; i < options.length; i++) {
+			String msg = options[i];
+			int col = Color.get(0, 222, 222, 222);
+			if (i == selected) {
+				msg = "> " + msg + " <";
+				col = Color.get(0, 555, 555, 555);
+			}
+			Font.draw(msg, screen, (screen.w - msg.length() * 8) / 2, (8 + i) * 12 - 35, col);
+		}**/
 		
 	}
 }

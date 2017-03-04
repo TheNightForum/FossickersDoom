@@ -3,6 +3,9 @@ package com.tnf.fdoom.sound;
 import java.applet.Applet;
 import java.applet.AudioClip;
 
+import com.tnf.fdoom.GameContainer;
+import com.tnf.fdoom.handlers.Logger;
+
 public class Sound {
 	public static final Sound playerHurt = new Sound("/playerhurt.wav");
 	public static final Sound playerDeath = new Sound("/death.wav");
@@ -18,7 +21,7 @@ public class Sound {
 		try {
 			clip = Applet.newAudioClip(Sound.class.getResource(name));
 		} catch (Throwable e) {
-			e.printStackTrace();
+			Logger.printLine("Could not load the sound clip but the name.", Logger.ERROR);
 		}
 	}
 
@@ -30,7 +33,7 @@ public class Sound {
 				}
 			}.start();
 		} catch (Throwable e) {
-			e.printStackTrace();
+			Logger.printLine("Could not play the selected sound clip.", Logger.ERROR);
 		}
 	}
 }

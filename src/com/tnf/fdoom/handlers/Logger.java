@@ -1,5 +1,9 @@
 package com.tnf.fdoom.handlers;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
 /**
  * Created by brayden on 5/1/17.
  */
@@ -29,6 +33,17 @@ public class Logger {
 
     public static void printLine(String inputString, String inputType) {
         System.out.println(" " + inputType + " | " + inputString);
+    }
+
+    private static void log(String message) {
+        PrintWriter out = null;
+        try {
+            out = new PrintWriter(new FileWriter("output.txt", true), true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        out.write(message);
+        out.close();
     }
 
     public static void printLine(Exception e){

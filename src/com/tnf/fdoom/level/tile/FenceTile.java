@@ -100,7 +100,7 @@ public class FenceTile extends Tile {
 			for (int i = 0; i < count; i++) {
 				level.add(new ItemEntity(new ResourceItem(Resource.wood), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
 			}
-			level.setTile(x, y, dirt, 0);
+			level.setTile(x, y, Tile.dirt, 0);
 		} else {
 			level.setData(x, y, damage);
 		}
@@ -127,7 +127,7 @@ public class FenceTile extends Tile {
 	{
 		int damage = level.getData(xt, yt) + burnPower;
 		if (damage >= MAX_DAMAGE) {
-			level.setTile(xt, yt, dirt, 0);
+			level.setTile(xt, yt, Tile.dirt, 0);
 		} else {
 			level.setData(xt, yt, damage);
 		}

@@ -8,19 +8,20 @@ import com.tnf.fdoom.gfx.Screen;
 import com.tnf.fdoom.handlers.Handler;
 import com.tnf.fdoom.sound.Sound;
 
-public class SetupMenu extends Menu {
+public class SetupMenuTest extends Menu {
 	private Menu parent;
 	
 	private int selected = 0;
 	private GameSetup setup;
 	
+	public static int DEFAULT_TEXT_COLOR = Color.get(-1, 555, 555, 555);
 	public static int DEFAULT_TITLE_COLOR = Color.get(112, 445, 445, 445);
 	public static int DEFAULT_BACKGROUND_COLOR = Color.get(112, 112, 112, 112);
 	public static int DEFAULT_BORDER_COLOR = Color.get(-1, 2, 112, 445);
 	
 	boolean onoff;
 	
-	public SetupMenu(Menu parent) {
+	public SetupMenuTest(Menu parent) {
 		this.parent = parent;
 		
 		this.setup = GameContainer.getInstance().getSetup();
@@ -71,6 +72,7 @@ public class SetupMenu extends Menu {
 		int optionColorInactive = Color.get(-1, 333, 333, 333);
 		
 		// Fog of war
+
 		Handler.readConfig(Handler.FOW);
 		if (Boolean.valueOf(Handler.Result)){
 			screen.render(marginX, yo, 0 + 1 * 32, checkboxColorTrue, 0);
@@ -78,6 +80,6 @@ public class SetupMenu extends Menu {
 			screen.render(marginX, yo, 0 + 1 * 32, checkboxColorFalse, 0);
 		}
 		
-		Font.draw("Fog of war", screen, marginX + 15, yo, selected == 0 ? optionColorActive : optionColorInactive);
+		Font.draw("Disable fog of war", screen, marginX + 15, yo, selected == 0 ? optionColorActive : optionColorInactive);
 	}
 }

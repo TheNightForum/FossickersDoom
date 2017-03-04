@@ -32,7 +32,7 @@ public class InventoryMenu extends Menu {
 		if (input.attack.clicked && len > 0) {
 			Item item = player.inventory.items.remove(selected);
 			player.activeItem = item;
-			game.setMenu((Menu) null);
+			game.setMenu(null);
 		}
 	}
 

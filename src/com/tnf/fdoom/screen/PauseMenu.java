@@ -4,6 +4,7 @@ import com.tnf.fdoom.GameContainer;
 import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Screen;
+import com.tnf.fdoom.handlers.Handler;
 import com.tnf.fdoom.sound.Sound;
 
 public class PauseMenu extends Menu {
@@ -34,12 +35,14 @@ public class PauseMenu extends Menu {
 			}
 			if (selected == 1) {
 				Sound.test.play();
-
+				Handler.readConfig(Handler.CurrentWorld);
+				String worldname = String.valueOf(Handler.Result);
+				GameContainer.saveGame(worldname);
 			}
 			if (selected == 2) game.setMenu(new TitleMenu());
 			if (selected == 3) game.setMenu(new SetupMenu(this));
 			if (selected == 4) System.exit(0);
-			//if (selected == 5) //game.setMenu(new OptionsMenu(true));
+			if (selected == 5) game.setMenu(new OptionsMenu(true));
 		}
 	}
 

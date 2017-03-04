@@ -66,13 +66,13 @@ public class TreeTile extends Tile {
 		if (random.nextInt(1000) == 0) {
 			int xa = xt + random.nextInt(2)*2 - 1;
 			int ya = yt + random.nextInt(2)*2 - 1;
-			if (level.getTile(xa, ya).equals(Tile.grass)) {
-				level.setTile(xa, ya, Tile.treeSapling, 0);
+			if (level.getTile(xa, ya).equals(grass)) {
+				level.setTile(xa, ya, treeSapling, 0);
 			}
 		}
 		// die
 		if (random.nextInt(2000) == 0) {
-			level.setTile(xt, yt, Tile.grass, 0);
+			level.setTile(xt, yt, grass, 0);
 		}
 	}
 
@@ -116,7 +116,7 @@ public class TreeTile extends Tile {
 			for (int i = 0; i < count; i++) {
 				level.add(new ItemEntity(new ResourceItem(Resource.acorn), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
 			}
-			level.setTile(x, y, Tile.grass, 0);
+			level.setTile(x, y, grass, 0);
 		} else {
 			level.setData(x, y, damage);
 		}
@@ -138,7 +138,7 @@ public class TreeTile extends Tile {
 	{
 		int damage = level.getData(xt, yt) + burnPower;
 		if (damage >= MAX_DAMAGE) {
-			level.setTile(xt, yt, Tile.dirt, 0);
+			level.setTile(xt, yt, dirt, 0);
 		} else {
 			level.setData(xt, yt, damage);
 		}
