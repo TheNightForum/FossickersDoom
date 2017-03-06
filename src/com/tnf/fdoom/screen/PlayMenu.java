@@ -75,7 +75,7 @@ public class PlayMenu extends Menu {
 				String worldname = Handler.Result;
 				GameContainer.loadGame(worldname);
 			}
-			if(selected == 1) game.setMenu(new NewWorldMenu(this));
+			if(selected == 1) game.setMenu(new NewWorldMenu());
 			if(selected == 2) game.setMenu(new LoadWorldMenu(this));
 			if(selected == 3) game.setMenu(parent);
 		}
