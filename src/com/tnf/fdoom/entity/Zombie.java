@@ -9,15 +9,17 @@ public class Zombie extends Mob {
 	private int xa, ya;
 	private int randomWalkTime = 0;
 
-	public Zombie() {
-		
-	}
 	
-	public Zombie(int lvl) {
+	public Zombie() {
 		this.karma = lvl * (-10);
 		this.lvl = lvl;
 		x = random.nextInt(64 * 16);
 		y = random.nextInt(64 * 16);
+		spawnChance = 3;
+	}
+	public void setLvl(int lvl)
+	{
+		this.lvl = lvl;
 		health = maxHealth = lvl * lvl * 10;
 	}
 

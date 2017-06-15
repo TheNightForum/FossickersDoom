@@ -25,12 +25,18 @@ public class LivingEntity extends Entity
 	public int health = maxHealth;
 	public int swimTimer = 0;
 	public int tickTime = 0;
-	protected int lvl;
+	public int spawnChance = 1;
+	public int lvl;
 	public int karma = 0;
 
 	public LivingEntity()
 	{
 		super();
+	}
+
+	public void setLvl(int lvl)
+	{
+
 	}
 
 	public void tick()
@@ -246,5 +252,4 @@ public class LivingEntity extends Entity
 		super.writeExternal(out);
 		// TODO
 	}
-
 }

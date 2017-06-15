@@ -14,7 +14,7 @@ public class Screen implements Serializable {
 	public static final int BIT_MIRROR_X = 0x01;
 	public static final int BIT_MIRROR_Y = 0x02;
 
-	public final int w, h;
+	public int w, h;
 	public int[] pixels;
 
 	private SpriteSheet sheet;
@@ -23,6 +23,16 @@ public class Screen implements Serializable {
 		this.sheet = sheet;
 		this.w = w;
 		this.h = h;
+
+		pixels = new int[w * h];
+	}
+
+	public void changeSpritesheet(int w, int h, SpriteSheet sheet)
+	{
+		System.out.println("changed spritesheer");
+		this.w = w;
+		this.h = h;
+		this.sheet = sheet;
 
 		pixels = new int[w * h];
 	}
