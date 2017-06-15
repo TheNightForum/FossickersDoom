@@ -55,7 +55,7 @@ public class RockFloorTile extends Tile {
 				if (player.payStamina(4 - tool.level)) {
 					level.setTile(xt, yt, Tile.dirt, 0);
 					level.add(new ItemEntity(new ResourceItem(Resource.stoneTile), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
-					Sound.monsterHurt.play();
+					Sound.play("monsterHurt");
 					return true;
 				}
 			}

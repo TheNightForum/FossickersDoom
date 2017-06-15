@@ -397,7 +397,7 @@ public class Player extends LivingEntity {
 
 	protected void die() {
 		super.die();
-		Sound.playerDeath.play();
+		Sound.play("playerDeath");
 	}
 
 	protected void touchedBy(Entity entity) {
@@ -409,7 +409,7 @@ public class Player extends LivingEntity {
 	protected void doHurt(int damage, int attackDir) {
 		if (hurtTime > 0 || invulnerableTime > 0) return;
 
-		Sound.playerHurt.play();
+		Sound.play("playerDeath");
 		level.add(new TextParticle("" + damage, x, y, Color.get(-1, 504, 504, 504)));
 		health -= damage;
 		if (attackDir == 0) yKnockback = +6;

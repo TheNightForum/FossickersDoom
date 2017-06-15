@@ -27,7 +27,7 @@ public class NewWorldMenu extends Menu {
                     dir.mkdirs();
                 }
                 this.name = "";
-                Sound.test.play();
+                Sound.play("test");
                 GeneratorMenu gen = new GeneratorMenu(this);
                 gen.init(game, input);
                 game.setMenu(gen);

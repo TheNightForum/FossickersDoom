@@ -119,7 +119,7 @@ public class WorldSelectMenu extends Menu
         if (WorldSelectMenu.loadworld && this.input.menu.clicked && !this.rename) {
             if (!this.delete) {
                 WorldSelectMenu.worldname = this.worldnames.get(this.worldselected);
-                Sound.test.play();
+                Sound.play("test");
                // this.game.resetstartGame();
                 this.game.setMenu(null);
             }

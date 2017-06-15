@@ -86,7 +86,7 @@ public class ItemEntity extends Entity implements Serializable {
 	}
 
 	public void take(Player player) {
-		Sound.pickup.play();
+		Sound.play("pickup");
 		player.score++;
 		item.onTake(this);
 		remove();

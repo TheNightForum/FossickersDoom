@@ -35,6 +35,10 @@ public class Logger {
         System.out.println(" " + inputType + " | " + inputString);
     }
 
+    public static void printLine(String inputString, Throwable t){
+            System.out.println(" " + ERROR + " | " + inputString + t);
+    }
+
     private static void log(String message) {
         PrintWriter out = null;
         try {

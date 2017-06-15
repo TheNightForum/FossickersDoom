@@ -26,7 +26,7 @@ public class Test extends Menu {
             f.mkdirs();
             Handler.writeConfig(Handler.CurrentWorld, String.valueOf(name));
             Handler.writeConfig(Handler.LastWorld, String.valueOf(name));
-            Sound.test.play();
+            Sound.play("test");
 				    GeneratorMenu gen = new GeneratorMenu(this);
 				    gen.init(game, input);
 				    game.setMenu(gen);

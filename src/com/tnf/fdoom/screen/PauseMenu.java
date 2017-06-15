@@ -30,11 +30,11 @@ public class PauseMenu extends Menu {
 
 		if (input.attack.clicked || input.menu.clicked) {
 			if (selected == 0) {
-				Sound.test.play();
+				Sound.play("test");
 				game.setMenu(null);
 			}
 			if (selected == 1) {
-				Sound.test.play();
+				Sound.play("test");
 				Handler.readConfig(Handler.CurrentWorld);
 				String worldname = String.valueOf(Handler.Result);
 				GameContainer.saveGame(worldname);

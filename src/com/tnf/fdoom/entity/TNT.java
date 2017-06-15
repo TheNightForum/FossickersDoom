@@ -64,13 +64,13 @@ public class TNT extends Furniture {
             if(ticks == 0) {
                 this.x += 1;
                 this.y += 1;
-                Sound.test.play();
+                Sound.play("test");
             }
             ticks++;
 
             if(ticks % 60 == 0 && ticks != sectodetonation*60) {
                 level.add(new TextParticle(String.valueOf(sectodetonation-ticks/60), xt * 16 + 8, yt * 16 + 8, Color.get(-1, 500, 500, 500)));
-                Sound.test.play();
+                Sound.play("test");
             }
             if(ticks > sectodetonation*60) {
                 ticks = 0;
@@ -84,14 +84,14 @@ public class TNT extends Furniture {
             on = true;
             this.x += 1;
             this.y += 1;
-            Sound.test.play();
+            Sound.play("test");
         }
         return true;
     }
 
     public void explode(int r) {
         Player player = null;
-        Sound.playerDeath.play();
+        Sound.play("playerDeath");
         List<Entity> result = new ArrayList<Entity>();
         result = this.level.getEntities(this.x-range*16, this.y-16*range, this.x+16*range, this.y+16*range);
         for (int i3=0;i3<result.size();i3++) {

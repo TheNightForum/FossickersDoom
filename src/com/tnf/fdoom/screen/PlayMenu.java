@@ -70,7 +70,7 @@ public class PlayMenu extends Menu {
 
 		if (input.attack.clicked || input.menu.clicked) {
 			if(selected == 0){
-				Sound.test.play();
+				Sound.play("test");
 				Handler.readConfig(Handler.LastWorld);
 				String worldname = Handler.Result;
 				GameContainer.loadGame(worldname);

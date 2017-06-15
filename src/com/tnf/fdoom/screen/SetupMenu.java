@@ -42,7 +42,7 @@ public class SetupMenu extends Menu {
 		if (input.attack.clicked) {
 			// Fog of war
 			if (selected == 0) {
-				Sound.craft.play();
+				Sound.play("craft");
 				Handler.readConfig(Handler.FOW);
 				Boolean isFog = Boolean.valueOf(Handler.Result);
 				if (isFog){

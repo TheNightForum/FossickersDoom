@@ -5,16 +5,15 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
+import java.io.*;
+import java.util.Collection;
 import java.util.Random;
 import com.tnf.fdoom.entity.Player;
 import com.tnf.fdoom.gfx.Color;
 import com.tnf.fdoom.gfx.Font;
 import com.tnf.fdoom.gfx.Screen;
 import com.tnf.fdoom.gfx.SpriteSheet;
+import com.tnf.fdoom.handlers.FDPlugin;
 import com.tnf.fdoom.handlers.Handler;
 import com.tnf.fdoom.handlers.Logger;
 import com.tnf.fdoom.level.Level;
@@ -24,6 +23,9 @@ import com.tnf.fdoom.screen.LevelTransitionMenu;
 import com.tnf.fdoom.screen.Menu;
 import com.tnf.fdoom.screen.SplashMenu;
 import com.tnf.fdoom.screen.WonMenu;
+import net.xeoh.plugins.base.PluginManager;
+import net.xeoh.plugins.base.impl.PluginManagerFactory;
+import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 import javax.imageio.ImageIO;
 
@@ -47,9 +49,9 @@ public class Game extends Canvas implements Runnable, Externalizable
 	private int[] pixels = ((DataBufferInt) image.getRaster().getDataBuffer()).getData();
 	private boolean running = false;
 	
-	public static Screen lightScreen;
-	public static Screen fogScreen;
-	public static Screen screen;
+	public Screen lightScreen;
+	public Screen fogScreen;
+	public Screen screen;
 	
 	public static SpriteSheet ultimateSheet;
 	private InputHandler input = new InputHandler(this);
@@ -58,7 +60,7 @@ public class Game extends Canvas implements Runnable, Externalizable
 	private int tickCount = 0;
 	public int gameTime = 0;
 
-	private Level level;
+	public Level level;
 	private Level[] levels = new Level[5];
 	private int currentLevel = 3;
 	public Player player;
@@ -68,6 +70,8 @@ public class Game extends Canvas implements Runnable, Externalizable
 	private int pendingLevelChange;
 	private int wonTimer = 0;
 	public boolean hasWon = false;
+
+	public static Collection<FDPlugin> plugins;
 
 	public static final int DAY_LENGTH = 20000;
 
@@ -148,9 +152,15 @@ public class Game extends Canvas implements Runnable, Externalizable
 	 * and we are done.
 	 */
 	public void init() {
+		loadPlugins();
 		initGraphics();
 
 		resetGame();
+
+		for(FDPlugin plugin : plugins)
+		{
+			plugin.ocws();
+		}
 		setMenu(new SplashMenu());
 	}
 	
@@ -186,6 +196,20 @@ public class Game extends Canvas implements Runnable, Externalizable
 			e.printStackTrace();
 		}
 		//create();
+	}
+
+	private void loadPlugins()
+	{
+		PluginManager pm = PluginManagerFactory.createPluginManager();
+		pm.addPluginsFrom(new File("").toURI());
+
+		plugins = new PluginManagerUtil(pm).getPlugins(FDPlugin.class);
+
+		for(FDPlugin plugin : plugins)
+		{
+			System.out.println("Loading Plugin: \"" + plugin.getClass() +"\"");
+			plugin.onLoad(this);
+		}
 	}
 
 	public void run() {

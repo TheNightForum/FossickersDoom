@@ -127,7 +127,7 @@ public class LoadWorldMenu extends Menu
         if (LoadWorldMenu.loadworld && this.input.menu.clicked && !this.rename) {
             if (!this.delete) {
             	LoadWorldMenu.worldname = this.worldnames.get(this.worldselected);
-                Sound.test.play();
+                Sound.play("test");
                // this.game.resetstartGame();
                 GameContainer.loadGame(this.worldname);
                 Handler.writeConfig(Handler.CurrentWorld, String.valueOf(this.worldname));

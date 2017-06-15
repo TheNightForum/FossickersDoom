@@ -121,7 +121,7 @@ public class LivingEntity extends Entity
 			int xd = level.player.x - x;
 			int yd = level.player.y - y;
 			if (xd * xd + yd * yd < 80 * 80) {
-				Sound.monsterHurt.play();
+				Sound.play("monsterHurt");
 			}
 		}
 		level.add(new TextParticle("" + damage, x, y, Color.get(-1, 500, 500, 500)));

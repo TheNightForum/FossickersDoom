@@ -84,7 +84,7 @@ public class Wanderer extends Npc
 					level.add(new ItemEntity(new ResourceItem(Resource.wood), xt * 16 + random.nextInt(10) + 3, yt * 16 + random.nextInt(10) + 3));
 				}
 				if (level.player != null && this.distanceFrom(level.player) < HEARING_DISTANCE) {
-					Sound.craft.play();
+					Sound.play("craft");
 				}
 				idleTime = 0;
 			}
@@ -102,7 +102,7 @@ public class Wanderer extends Npc
 					level.add(new ItemEntity(new ResourceItem(Resource.wood), x * 16 + random.nextInt(10) + 3, y * 16 + random.nextInt(10) + 3));
 				}
 				if (level.player != null && this.distanceFrom(level.player) < HEARING_DISTANCE) {
-					Sound.craft.play();
+					Sound.play("craft");
 				}
 				idleTime = 0;
 			}

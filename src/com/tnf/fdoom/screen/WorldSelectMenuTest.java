@@ -126,7 +126,7 @@ public class WorldSelectMenuTest extends Menu
         if (WorldSelectMenuTest.loadworld && this.input.menu.clicked && !this.rename) {
             if (!this.delete) {
                 WorldSelectMenuTest.worldname = this.worldnames.get(this.worldselected);
-                Sound.test.play();
+                Sound.play("test");
                 Handler.writeConfig(Handler.CurrentWorld, String.valueOf(this.worldname));
                 GameContainer.loadGame(this.worldname);
                 this.game.setMenu(null);

@@ -73,12 +73,12 @@ public class UpdateMenu extends Menu {
 
 		if (input.attack.clicked || input.menu.clicked) {
 			if (selected == 0) {
-				Sound.test.play();
+				Sound.play("test");
 				Handler.getUpdates();
 				this.game.setMenu(new ForceMenu());
 			}
 			if (selected == 1) {
-				Sound.test.play();
+				Sound.play("test");
 				Handler.readConfig(Handler.PlayerName);
 				if(Handler.Result.equals("Player")) this.game.setMenu(new NewPlayer());
 				else this.game.setMenu(new TitleMenu());
